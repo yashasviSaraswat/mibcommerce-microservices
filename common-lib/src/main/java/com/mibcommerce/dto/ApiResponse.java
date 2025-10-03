@@ -1,4 +1,4 @@
-package com.mibcommerce.common.dto;
+package com.mibcommerce.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
