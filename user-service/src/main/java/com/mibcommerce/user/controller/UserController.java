@@ -3,14 +3,13 @@ import com.mibcommerce.common.dto.UserDto;
 
 import com.mibcommerce.common.dto.ApiResponse;
 import com.mibcommerce.common.dto.UserDto;
-import com.mibcommerce.security.UserPrincipal;
+import com.mibcommerce.common.security.UserPrincipal;
 import com.mibcommerce.user.dto.UpdateProfileRequest;
 import com.mibcommerce.user.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.Map;
 
 @RestController

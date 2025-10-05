@@ -1,4 +1,4 @@
-package com.mibcommerce.security;
+package com.mibcommerce.common.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

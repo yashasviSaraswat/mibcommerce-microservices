@@ -1,4 +1,4 @@
-package com.mibcommerce.exception;
+package com.mibcommerce.common.exception;
 
 public class UnauthorizedException extends RuntimeException {
     public UnauthorizedException(String message) {

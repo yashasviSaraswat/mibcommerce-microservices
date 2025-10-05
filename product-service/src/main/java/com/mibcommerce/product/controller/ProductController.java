@@ -1,6 +1,6 @@
 package com.mibcommerce.product.controller;
 
-import com.mibcommerce.dto.ApiResponse;
+import com.mibcommerce.common.dto.ApiResponse;
 import com.mibcommerce.product.model.Brand;
 import com.mibcommerce.product.model.Product;
 import com.mibcommerce.product.model.Type;

@@ -1,8 +1,9 @@
 package com.mibcommerce.user.service;
 
 import com.mibcommerce.common.dto.ApiResponse;
-import com.mibcommerce.common.dto.UserDto;
-import com.mibcommerce.common.exception.ResourceNotFoundException;
+import com.mibcommerce.common.dto.*;
+
+import com.mibcommerce.common.exception.*;
 import com.mibcommerce.user.dto.UpdateProfileRequest;
 import com.mibcommerce.user.model.User;
 import com.mibcommerce.user.model.UserProfile;

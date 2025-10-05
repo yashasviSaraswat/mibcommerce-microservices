@@ -1,7 +1,5 @@
 package com.mibcommerce.user.dto;
-
-
-import com.mibcommerce.dto.UserDto;
+import com.mibcommerce.common.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
