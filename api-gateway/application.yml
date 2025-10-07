@@ -4,16 +4,13 @@ server:
 spring:
   application:
     name: api-gateway
-
   cloud:
     gateway:
-      # Global CORS configuration
       globalcors:
         corsConfigurations:
           '[/**]':
             allowedOrigins:
               - "http://localhost:3000"
-              - "http://localhost:3001"
             allowedMethods:
               - GET
               - POST
@@ -24,121 +21,63 @@ spring:
             allowCredentials: true
             maxAge: 3600
 
-      # Route definitions
+      # DYNAMIC ROUTING with Eureka
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
       routes:
-        # ========================================
         # User Service Routes
-        # ========================================
         - id: user-service-auth
-          uri: http://localhost:8081
+          uri: lb://user-service
           predicates:
             - Path=/api/auth/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: user-service
-                fallbackUri: forward:/fallback/user-service
 
         - id: user-service-users
-          uri: http://localhost:8081
+          uri: lb://user-service
           predicates:
             - Path=/api/users/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: user-service
-                fallbackUri: forward:/fallback/user-service
 
-        # ========================================
         # Product Service Routes
-        # ========================================
-        - id: product-service-products
-          uri: http://localhost:8082
+        - id: product-service
+          uri: lb://product-service
           predicates:
-            - Path=/api/products/**
-          filters:
-            - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: product-service
-                fallbackUri: forward:/fallback/product-service
-
-        - id: product-service-brands
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/brands/**
+            - Path=/api/products/**,/api/brands/**,/api/types/**
           filters:
             - StripPrefix=1
 
-        - id: product-service-types
-          uri: http://localhost:8082
-          predicates:
-            - Path=/api/types/**
-          filters:
-            - StripPrefix=1
-
-        # ========================================
         # Order Service Routes
-        # ========================================
-        - id: order-service-orders
-          uri: http://localhost:8083
+        - id: order-service
+          uri: lb://order-service
           predicates:
-            - Path=/api/orders/**
-          filters:
-            - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: order-service
-                fallbackUri: forward:/fallback/order-service
-
-        - id: order-service-cart
-          uri: http://localhost:8083
-          predicates:
-            - Path=/api/cart/**
+            - Path=/api/orders/**,/api/cart/**
           filters:
             - StripPrefix=1
 
-        # ========================================
         # Payment Service Routes
-        # ========================================
         - id: payment-service
-          uri: http://localhost:8084
+          uri: lb://payment-service
           predicates:
             - Path=/api/payments/**
           filters:
             - StripPrefix=1
-            - name: CircuitBreaker
-              args:
-                name: payment-service
-                fallbackUri: forward:/fallback/payment-service
 
-      # Default filters applied to all routes
       default-filters:
         - name: Retry
           args:
             retries: 3
             statuses: BAD_GATEWAY,GATEWAY_TIMEOUT
-            methods: GET,POST
-            backoff:
-              firstBackoff: 50ms
-              maxBackoff: 500ms
 
-# Management endpoints for monitoring
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics,gateway
-  endpoint:
-    health:
-      show-details: always
-
-# Logging
-logging:
-  level:
-    org.springframework.cloud.gateway: DEBUG
-    reactor.netty: INFO
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss} - %msg%n"
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+  instance:
+    prefer-ip-address: true

@@ -29,6 +29,13 @@
             <version>3.2.0</version>
         </dependency>
 
+        <!-- Eureka Client for discovery -->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+
+
         <!-- JSON Web Token (JJWT) Dependencies -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>

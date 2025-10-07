@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>API Tester</title>
+    <style>
+        body { font-family: Arial; margin: 20px; background: #f5f5f5; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; }
+        button { background: #007bff; color: white; padding: 10px 20px; border: none; border-radius: 4px; cursor: pointer; margin: 10px 5px; }
+        button:hover { background: #0056b3; }
+        .result { background: #f8f9fa; padding: 15px; margin-top: 10px; border-radius: 4px; white-space: pre-wrap; }
+        input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+        .section { margin: 20px 0; padding: 15px; border: 1px solid #e0e0e0; border-radius: 4px; }
+        h2 { color: #333; margin-top: 0; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🚀 MibCommerce API Tester</h1>
+
+    <div class="section">
+        <h2>1. Register User</h2>
+        <input type="email" id="regEmail" placeholder="Email" value="test@example.com">
+        <input type="password" id="regPassword" placeholder="Password" value="password123">
+        <input type="text" id="regName" placeholder="Name" value="Test User">
+        <button onclick="register()">✅ Register</button>
+        <div id="regResult" class="result"></div>
+    </div>
+
+    <div class="section">
+        <h2>2. Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email" value="test@example.com">
+        <input type="password" id="loginPassword" placeholder="Password" value="password123">
+        <button onclick="login()">🔑 Login</button>
+        <div id="loginResult" class="result"></div>
+        <p><strong>Token:</strong></p>
+        <input type="text" id="token" placeholder="Token will appear here" readonly>
+    </div>
+
+    <div class="section">
+        <h2>3. Get Products</h2>
+        <button onclick="getProducts()">📦 Get All Products</button>
+        <button onclick="getBrands()">🏷️ Get Brands</button>
+        <button onclick="getTypes()">📑 Get Types</button>
+        <div id="productsResult" class="result"></div>
+    </div>
+
+    <div class="section">
+        <h2>4. Get User Profile (Login Required)</h2>
+        <button onclick="getUserProfile()">👤 Get My Profile</button>
+        <div id="profileResult" class="result"></div>
+    </div>
+</div>
+
+<script>
+    const API_BASE = 'http://localhost:8080/api';
+    let authToken = '';
+
+    async function register() {
+        const email = document.getElementById('regEmail').value;
+        const password = document.getElementById('regPassword').value;
+        const name = document.getElementById('regName').value;
+
+        document.getElementById('regResult').textContent = 'Loading...';
+
+        try {
+            const response = await fetch(`${API_BASE}/auth/register`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, name })
+            });
+            const data = await response.json();
+            document.getElementById('regResult').textContent = JSON.stringify(data, null, 2);
+
+            if (data.success) {
+                authToken = data.data.token;
+                document.getElementById('token').value = authToken;
+                alert('✅ Registration successful! Token saved.');
+            }
+        } catch (error) {
+            document.getElementById('regResult').textContent = '❌ Error: ' + error.message;
+        }
+    }
+
+    async function login() {
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
+
+        document.getElementById('loginResult').textContent = 'Loading...';
+
+        try {
+            const response = await fetch(`${API_BASE}/auth/login`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password })
+            });
+            const data = await response.json();
+            document.getElementById('loginResult').textContent = JSON.stringify(data, null, 2);
+
+            if (data.success) {
+                authToken = data.data.token;
+                document.getElementById('token').value = authToken;
+                alert('✅ Login successful! Token saved.');
+            }
+        } catch (error) {
+            document.getElementById('loginResult').textContent = '❌ Error: ' + error.message;
+        }
+    }
+
+    async function getProducts() {
+        document.getElementById('productsResult').textContent = 'Loading...';
+        try {
+            const response = await fetch(`${API_BASE}/products`);
+            const data = await response.json();
+            document.getElementById('productsResult').textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            document.getElementById('productsResult').textContent = '❌ Error: ' + error.message;
+        }
+    }
+
+    async function getBrands() {
+        document.getElementById('productsResult').textContent = 'Loading...';
+        try {
+            const response = await fetch(`${API_BASE}/brands`);
+            const data = await response.json();
+            document.getElementById('productsResult').textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            document.getElementById('productsResult').textContent = '❌ Error: ' + error.message;
+        }
+    }
+
+    async function getTypes() {
+        document.getElementById('productsResult').textContent = 'Loading...';
+        try {
+            const response = await fetch(`${API_BASE}/types`);
+            const data = await response.json();
+            document.getElementById('productsResult').textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            document.getElementById('productsResult').textContent = '❌ Error: ' + error.message;
+        }
+    }
+
+    async function getUserProfile() {
+        if (!authToken) {
+            alert('⚠️ Please login first to get token!');
+            return;
+        }
+
+        document.getElementById('profileResult').textContent = 'Loading...';
+        try {
+            const response = await fetch(`${API_BASE}/users/me`, {
+                headers: { 'Authorization': `Bearer ${authToken}` }
+            });
+            const data = await response.json();
+            document.getElementById('profileResult').textContent = JSON.stringify(data, null, 2);
+        } catch (error) {
+            document.getElementById('profileResult').textContent = '❌ Error: ' + error.message;
+        }
+    }
+</script>
+</body>
+</html>

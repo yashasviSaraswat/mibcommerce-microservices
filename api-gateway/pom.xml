@@ -14,29 +14,23 @@
     <artifactId>api-gateway</artifactId>
 
     <dependencies>
-        <!-- Spring Cloud Gateway -->
+    <!-- Common-lib -->
+    <dependency>
+        <groupId>com.mibcommerce</groupId>
+        <artifactId>common-lib</artifactId>
+        <version>1.0.0</version>
+    </dependency>
+    <!-- Eureka Client for discovery -->
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-gateway</artifactId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
         </dependency>
-
-        <!-- WebFlux (required by Gateway) -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webflux</artifactId>
-        </dependency>
-
-        <!-- Actuator for health checks -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-actuator</artifactId>
-        </dependency>
-
-        <!-- Lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-        </dependency>
+    <!-- Lombok -->
+    <dependency>
+        <groupId>org.projectlombok</groupId>
+        <artifactId>lombok</artifactId>
+        <optional>true</optional>
+    </dependency>
     </dependencies>
 
     <build>
